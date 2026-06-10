@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>The Oracle's Stone — Mayur Brahmbhatt</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--gold:#C9A84C;--gold-light:#E8C97A;--white:#FFFFFF;--red:#e63946;--bg:#000814;--section-bg:rgba(0,8,20,0.88)}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
+  .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden}
+  .cosmos-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.35) sepia(0.3) hue-rotate(200deg);transform:scale(1.05);animation:slowDrift 40s ease-in-out infinite alternate}
+  @keyframes slowDrift{from{transform:scale(1.05) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1.5%)}}
+  .cosmos::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,transparent 30%,rgba(0,8,20,.7) 100%),linear-gradient(to bottom,rgba(0,8,20,.5) 0%,transparent 30%,transparent 70%,rgba(0,8,20,.9) 100%)}
+  .stars{position:fixed;inset:0;z-index:1;pointer-events:none}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;opacity:0}
+  @keyframes twinkle{from{opacity:0;transform:scale(.5)}to{opacity:var(--op,.8);transform:scale(1.3)}}
+  .page{position:relative;z-index:2}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(0,8,20,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,.2)}
+  .nav-logo{font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:4px;color:var(--gold);text-decoration:none}
+  .nav-links{display:flex;gap:2.5rem;list-style:none}
+  .nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:color .3s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{font-family:'Bebas Neue',cursive;letter-spacing:3px;font-size:.9rem;padding:.6rem 1.8rem;border:1px solid var(--gold);color:var(--gold);text-decoration:none;transition:all .3s}
+  .nav-cta:hover{background:var(--gold);color:var(--bg)}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none;z-index:210}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--gold);transition:all .3s;border-radius:2px}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* MOBILE DRAWER */
+  .mobile-menu{display:none;position:fixed;inset:0;z-index:190;background:rgba(0,8,20,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+  .mobile-menu.open{opacity:1;pointer-events:all;display:flex}
+  .mobile-menu a{font-family:'Bebas Neue',cursive;font-size:2.4rem;letter-spacing:6px;color:rgba(255,255,255,.6);text-decoration:none;padding:1.1rem 2rem;width:100%;text-align:center;border-bottom:1px solid rgba(201,168,76,.08);transition:color .2s}
+  .mobile-menu a:active,.mobile-menu a:hover{color:var(--gold)}
+  .mobile-menu .menu-cta{margin-top:2rem;background:var(--gold);color:var(--bg);font-family:'Bebas Neue',cursive;font-size:1.2rem;letter-spacing:4px;padding:1rem 3rem;border:none;cursor:pointer;text-decoration:none;display:inline-block;width:auto}
+
+  /* HERO */
+  .hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem;position:relative}
+  .hero-eyebrow{font-size:.62rem;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .3s forwards}
+  .hero-title{font-family:'Bebas Neue',cursive;font-size:clamp(4.5rem,20vw,12rem);line-height:.9;letter-spacing:4px;color:var(--white);opacity:0;animation:fadeUp .8s .5s forwards}
+  .hero-title span{display:block;color:var(--gold)}
+  .hero-sub{font-size:clamp(.55rem,2.5vw,.85rem);font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:1rem;opacity:0;animation:fadeUp .8s .7s forwards}
+  .hero-divider{display:flex;align-items:center;gap:1rem;margin:2rem auto;opacity:0;animation:fadeUp .8s .9s forwards}
+  .hero-divider::before,.hero-divider::after{content:'';height:1px;width:60px;background:linear-gradient(to right,transparent,var(--gold))}
+  .hero-divider::after{transform:scaleX(-1)}
+  .hero-divider-dot{width:6px;height:6px;background:var(--red);border-radius:50%}
+  .hero-name{font-family:'Bebas Neue',cursive;font-size:clamp(1.3rem,6vw,2.8rem);letter-spacing:8px;color:var(--gold-light);opacity:0;animation:fadeUp .8s 1.1s forwards}
+  .hero-tagline{font-size:clamp(.72rem,2vw,.9rem);font-weight:400;letter-spacing:1px;color:rgba(255,255,255,.5);margin-top:.5rem;opacity:0;animation:fadeUp .8s 1.3s forwards;max-width:320px;line-height:1.6}
+  .hero-cta-group{display:flex;gap:1rem;margin-top:2.5rem;opacity:0;animation:fadeUp .8s 1.5s forwards;flex-wrap:wrap;justify-content:center}
+  .scroll-indicator{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:fadeIn 1s 2s forwards}
+  .scroll-indicator span{font-size:.55rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+  .scroll-line{width:1px;height:35px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 1.5s ease-in-out infinite}
+  @keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{to{opacity:1}}
+
+  /* BUTTONS */
+  .btn-primary{font-family:'Bebas Neue',cursive;letter-spacing:4px;font-size:1rem;padding:.9rem 2.4rem;background:var(--gold);color:var(--bg);border:none;cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .btn-primary:active{background:var(--gold-light);transform:scale(.97)}
+  .btn-outline{font-family:'Bebas Neue',cursive;letter-spacing:4px;font-size:1rem;padding:.9rem 2.4rem;border:1px solid rgba(255,255,255,.3);color:var(--white);cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block;-webkit-tap-highlight-color:transparent}
+  .btn-outline:active{border-color:var(--gold);color:var(--gold)}
+
+  /* MARQUEE */
+  .marquee-strip{position:relative;z-index:2;background:var(--gold);padding:.8rem 0;overflow:hidden;white-space:nowrap}
+  .marquee-inner{display:inline-flex;animation:marquee 22s linear infinite}
+  .marquee-inner span{font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:4px;color:var(--bg);padding:0 1.5rem}
+  .marquee-inner .dot{color:var(--red);padding:0}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* SECTIONS */
+  section{position:relative;z-index:2;padding:5rem 4rem}
+  .section-bg{background:var(--section-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .section-label{font-size:.62rem;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+  .section-label::before{content:'';width:30px;height:1px;background:var(--gold)}
+  .section-heading{font-family:'Bebas Neue',cursive;font-size:clamp(2.5rem,7vw,6rem);line-height:.95;letter-spacing:2px;color:var(--white);margin-bottom:1.2rem}
+  .gold-line{width:50px;height:1px;background:var(--gold);margin:1.2rem 0}
+
+
+  /* ═══════════════════════════════════════
+     EXPERTISE — PREMIUM CARD REDESIGN
+  ═══════════════════════════════════════ */
+  .expertise-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1.5rem;
+    margin-top:3.5rem;
+  }
+  .expertise-card{
+    position:relative;
+    padding:2.5rem 1.5rem 2rem;
+    background:rgba(4,12,30,0.7);
+    border:1px solid rgba(201,168,76,0.12);
+    overflow:hidden;
+    cursor:default;
+    transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s;
+    -webkit-tap-highlight-color:transparent;
+    clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  }
+  /* Animated gradient top border */
+  .expertise-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--card-accent, var(--gold)), transparent);
+    transform:translateX(-100%);
+    transition:transform .6s ease;
+  }
+  /* Corner cut accent */
+  .expertise-card::after{
+    content:'';
+    position:absolute;
+    top:-1px;right:-1px;
+    width:22px;height:22px;
+    background:var(--card-accent, var(--gold));
+    clip-path:polygon(0 0,100% 0,100% 100%);
+    opacity:.5;
+    transition:opacity .4s;
+  }
+  .expertise-card:hover{
+    transform:translateY(-8px);
+    border-color:var(--card-accent, var(--gold));
+    box-shadow:0 20px 60px rgba(0,0,0,.5), 0 0 30px var(--card-glow, rgba(201,168,76,.15));
+  }
+  .expertise-card:hover::before{ transform:translateX(0); }
+  .expertise-card:hover::after{ opacity:1; }
+
+  /* Per-card accent colors */
+  .expertise-card:nth-child(1){--card-accent:#C9A84C;--card-glow:rgba(201,168,76,.2)}
+  .expertise-card:nth-child(2){--card-accent:#00e5ff;--card-glow:rgba(0,229,255,.15)}
+  .expertise-card:nth-child(3){--card-accent:#aa00ff;--card-glow:rgba(170,0,255,.15)}
+  .expertise-card:nth-child(4){--card-accent:#00e676;--card-glow:rgba(0,230,118,.15)}
+  .expertise-card:nth-child(5){--card-accent:#ff6d00;--card-glow:rgba(255,109,0,.15)}
+
+  /* Radial background glow on hover */
+  .expertise-card .card-bg-glow{
+    position:absolute;
+    inset:0;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--card-glow,rgba(201,168,76,.08)) 0%, transparent 70%);
+    opacity:0;
+    transition:opacity .4s;
+  }
+  .expertise-card:hover .card-bg-glow{ opacity:1; }
+
+  /* Icon container — circular with glow ring */
+  .card-icon-wrap{
+    width:64px;height:64px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.4);
+    border:1px solid var(--card-accent, var(--gold));
+    margin-bottom:1.4rem;
+    position:relative;
+    transition:box-shadow .4s;
+  }
+  .expertise-card:hover .card-icon-wrap{
+    box-shadow:0 0 0 6px var(--card-glow, rgba(201,168,76,.1)), 0 0 20px var(--card-accent, var(--gold));
+  }
+  .card-icon-wrap::before{
+    content:'';
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    border:1px solid var(--card-accent, var(--gold));
+    opacity:0.2;
+    animation:iconRingPulse 3s ease-in-out infinite;
+  }
+  @keyframes iconRingPulse{
+    0%,100%{transform:scale(1);opacity:.2}
+    50%{transform:scale(1.15);opacity:.5}
+  }
+  .card-icon{
+    font-size:1.8rem;
+    display:block;
+    filter:drop-shadow(0 0 8px var(--card-accent, var(--gold)));
+    line-height:1;
+  }
+  .card-number{
+    position:absolute;
+    top:1.2rem;right:1.2rem;
+    font-family:'Bebas Neue',cursive;
+    font-size:2.5rem;
+    color:rgba(255,255,255,.04);
+    line-height:1;
+    pointer-events:none;
+  }
+  .card-title{
+    font-family:'Bebas Neue',cursive;
+    font-size:1.15rem;
+    letter-spacing:3px;
+    color:var(--card-accent, var(--gold));
+    margin-bottom:.7rem;
+    transition:color .3s;
+  }
+  .card-desc{
+    font-size:.77rem;
+    line-height:1.75;
+    color:rgba(255,255,255,.5);
+  }
+  /* Thin bottom accent line */
+  .card-bottom-line{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:1px;
+    background:linear-gradient(90deg, var(--card-accent,var(--gold)), transparent);
+    opacity:0;
+    transition:opacity .4s;
+  }
+  .expertise-card:hover .card-bottom-line{ opacity:1; }
+
+  /* ═══════════════════════════════════════
+     SERVICES — PREMIUM PRICING REDESIGN
+  ═══════════════════════════════════════ */
+  .services-section{background:var(--section-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .services-layout{display:grid;grid-template-columns:280px 1fr;gap:2rem;margin-top:3.5rem;align-items:start}
+
+  /* What You Receive — glassmorphic panel */
+  .receive-panel{
+    background:linear-gradient(145deg, rgba(201,168,76,.08), rgba(0,8,20,.6));
+    border:1px solid rgba(201,168,76,.3);
+    padding:2rem 1.6rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .receive-panel::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--gold),transparent);
+  }
+  .receive-panel-glow{
+    position:absolute;
+    top:-40px;right:-40px;
+    width:120px;height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);
+    pointer-events:none;
+  }
+  .receive-title{
+    font-family:'Bebas Neue',cursive;
+    font-size:1.05rem;letter-spacing:4px;
+    color:var(--gold);
+    margin-bottom:1.6rem;
+    text-align:center;
+    padding-bottom:.9rem;
+    border-bottom:1px solid rgba(201,168,76,.18);
+    position:relative;
+  }
+  .receive-item{
+    display:flex;align-items:center;gap:.9rem;
+    margin-bottom:.9rem;
+    font-size:.8rem;color:rgba(255,255,255,.75);line-height:1.5;
+    padding:.5rem .6rem;
+    border-radius:2px;
+    transition:background .3s;
+  }
+  .receive-item:hover{ background:rgba(201,168,76,.06); }
+  .receive-item-icon{
+    font-size:1.1rem;flex-shrink:0;
+    width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background:rgba(201,168,76,.1);
+    filter:drop-shadow(0 0 4px rgba(201,168,76,.4));
+  }
+
+  /* Service pricing cards — vertical stack */
+  .service-rows{
+    display:flex;flex-direction:column;gap:.8rem;
+  }
+  .service-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    background:rgba(4,12,30,.75);
+    border:1px solid rgba(201,168,76,.1);
+    padding:1.6rem 1.8rem;
+    gap:1.5rem;
+    align-items:center;
+    transition:all .35s cubic-bezier(.16,1,.3,1);
+    position:relative;
+    overflow:hidden;
+    clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+  .service-row::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, rgba(201,168,76,.05) 0%, transparent 60%);
+    opacity:0;
+    transition:opacity .35s;
+  }
+  .service-row::after{
+    content:'';
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:3px;
+    background:linear-gradient(to bottom, var(--gold), rgba(201,168,76,.3));
+    transform:scaleY(0);
+    transform-origin:top;
+    transition:transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .service-row:hover{
+    border-color:rgba(201,168,76,.3);
+    transform:translateX(4px);
+    box-shadow:0 8px 40px rgba(0,0,0,.4), -4px 0 20px rgba(201,168,76,.08);
+  }
+  .service-row:hover::before{ opacity:1; }
+  .service-row:hover::after{ transform:scaleY(1); }
+
+  .service-row-left{display:flex;gap:1.2rem;align-items:flex-start}
+  /* Icon in circle */
+  .service-icon-wrap{
+    width:48px;height:48px;
+    border-radius:50%;
+    background:rgba(201,168,76,.08);
+    border:1px solid rgba(201,168,76,.2);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    transition:all .35s;
+  }
+  .service-row:hover .service-icon-wrap{
+    background:rgba(201,168,76,.15);
+    border-color:var(--gold);
+    box-shadow:0 0 16px rgba(201,168,76,.2);
+  }
+  .service-icon{font-size:1.4rem;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(201,168,76,.5))}
+  .service-name{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:3px;color:var(--gold);margin-bottom:.35rem}
+  .service-desc{font-size:.74rem;line-height:1.65;color:rgba(255,255,255,.5)}
+  .service-note{font-size:.65rem;color:rgba(201,168,76,.55);margin-top:.4rem;font-style:italic}
+
+  /* Price badge */
+  .service-price{ text-align:right; flex-shrink:0; }
+  .price-badge{
+    display:inline-block;
+    padding:.6rem 1.1rem;
+    background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));
+    border:1px solid rgba(201,168,76,.3);
+    text-align:right;
+    position:relative;
+    clip-path:polygon(8px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 8px);
+  }
+  .price-value{font-family:'Bebas Neue',cursive;font-size:1.55rem;letter-spacing:2px;color:var(--white);line-height:1;display:block}
+  .price-value span{font-size:.85rem;color:var(--gold);display:block;margin:2px 0}
+  .price-sub{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.25rem;display:block}
+  .price-vary{
+    font-size:.68rem;color:rgba(201,168,76,.75);
+    line-height:1.55;text-align:right;
+    padding:.5rem .8rem;
+    border:1px dashed rgba(201,168,76,.25);
+    font-style:italic;
+  }
+
+  /* TRUST BAR */
+  .trust-bar{position:relative;z-index:2;background:rgba(0,8,20,.9);border-top:1px solid rgba(201,168,76,.2);border-bottom:1px solid rgba(201,168,76,.2);padding:1.1rem 4rem;display:flex;align-items:center;justify-content:center;gap:2.5rem}
+  .trust-item{font-size:.62rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+  .trust-divider{width:1px;height:18px;background:rgba(201,168,76,.3);flex-shrink:0}
+
+  /* MANIFESTO */
+  .manifesto{text-align:center;padding:5rem 2rem;background:rgba(201,168,76,.05);backdrop-filter:blur(10px);border-top:1px solid rgba(201,168,76,.2);border-bottom:1px solid rgba(201,168,76,.2);position:relative;z-index:2}
+  .manifesto-text{font-family:'Bebas Neue',cursive;font-size:clamp(2rem,6vw,5.5rem);letter-spacing:3px;line-height:1.15;color:var(--white)}
+  .manifesto-text em{color:var(--gold);font-style:normal}
+  .manifesto-red{display:inline-block;width:10px;height:10px;background:var(--red);border-radius:50%;margin-left:.2rem;vertical-align:middle}
+
+  /* EXPERIENCE */
+  .experience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem;margin-top:3rem}
+  .exp-item{text-align:center;padding:2rem .8rem;border:1px solid rgba(201,168,76,.15);background:rgba(0,8,20,.7);backdrop-filter:blur(6px);transition:all .4s;-webkit-tap-highlight-color:transparent}
+  .exp-item:active{border-color:var(--gold)}
+  .exp-icon{font-size:2rem;display:block;margin-bottom:.8rem}
+  .exp-label{font-family:'Bebas Neue',cursive;font-size:.9rem;letter-spacing:3px;color:var(--white)}
+
+  /* PILLARS */
+  .pillars-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:3rem}
+  .pillar{text-align:center;padding:1.8rem .5rem}
+  .pillar-number{font-family:'Bebas Neue',cursive;font-size:2.5rem;color:rgba(201,168,76,.1);line-height:1;margin-bottom:.4rem}
+  .pillar-icon{font-size:1.6rem;display:block;margin-bottom:.6rem}
+  .pillar-name{font-family:'Bebas Neue',cursive;font-size:.8rem;letter-spacing:3px;color:var(--gold)}
+
+  /* CONTACT */
+  .contact-section{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;background:var(--section-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(201,168,76,.15)}
+  .contact-left p{font-size:.83rem;line-height:1.8;color:rgba(255,255,255,.55);margin-bottom:1.8rem}
+  .contact-detail{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.06)}
+  .contact-detail-label{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);min-width:80px}
+  .contact-detail-val{font-size:.83rem;color:var(--white)}
+  .contact-form{display:flex;flex-direction:column;gap:1rem}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .contact-form input,.contact-form textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);color:var(--white);padding:.9rem 1.1rem;font-family:'Inter',sans-serif;font-size:.8rem;letter-spacing:1px;outline:none;transition:border-color .3s;-webkit-appearance:none;border-radius:0}
+  .contact-form input::placeholder,.contact-form textarea::placeholder{color:rgba(255,255,255,.25);text-transform:uppercase;font-size:.68rem;letter-spacing:3px}
+  .contact-form input:focus,.contact-form textarea:focus{border-color:var(--gold);background:rgba(201,168,76,.04)}
+  .contact-form textarea{height:110px;resize:none}
+
+  /* FOOTER */
+  footer{position:relative;z-index:2;background:rgba(0,8,20,.97);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(201,168,76,.15)}
+  .footer-logo{font-family:'Bebas Neue',cursive;font-size:1.6rem;letter-spacing:6px;color:var(--gold)}
+  .footer-copy{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.3rem}
+  .footer-tagline{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.2);text-align:right;line-height:1.8}
+
+  /* STICKY BOTTOM BAR — mobile only */
+  .sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(0,8,20,.97);border-top:1px solid rgba(201,168,76,.3);padding:.85rem 1.2rem calc(.85rem + env(safe-area-inset-bottom));gap:.7rem}
+  .sticky-cta a{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:'Bebas Neue',cursive;font-size:.95rem;letter-spacing:3px;text-decoration:none;padding:.8rem .5rem;-webkit-tap-highlight-color:transparent;touch-action:manipulation;border-radius:0}
+  .sticky-cta .cta-call{background:rgba(201,168,76,.12);border:1px solid var(--gold);color:var(--gold)}
+  .sticky-cta .cta-wa{background:#25d366;color:#000}
+
+  .reveal{opacity:0;transform:translateY(35px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  /* TABLET */
+  @media(max-width:1024px){
+    nav{padding:1rem 2rem}
+    section{padding:5rem 2rem}
+    .trust-bar{padding:1rem 2rem;gap:1.5rem}
+    footer{padding:2rem}
+    .expertise-grid{grid-template-columns:repeat(3,1fr)}
+    .services-layout{grid-template-columns:220px 1fr;gap:1.5rem}
+    .experience-grid{grid-template-columns:repeat(3,1fr)}
+    .pillars-grid{grid-template-columns:repeat(3,1fr)}
+  }
+
+  /* MOBILE */
+  @media(max-width:767px){
+    nav{padding:.9rem 1.2rem}
+    .nav-links{display:none}
+    .nav-cta{display:none}
+    .hamburger{display:flex}
+
+    .hero{padding:5.5rem 1.2rem 5rem;min-height:100svh}
+    .hero-eyebrow{font-size:.55rem;letter-spacing:3px}
+    .hero-title{font-size:clamp(3.8rem,22vw,7rem)}
+    .hero-sub{font-size:.55rem;letter-spacing:4px}
+    .hero-name{letter-spacing:4px}
+    .hero-tagline{font-size:.75rem;max-width:280px}
+    .hero-cta-group{flex-direction:column;width:100%;align-items:stretch;gap:.8rem}
+    .btn-primary,.btn-outline{width:100%;text-align:center;padding:1rem 1rem;font-size:1.05rem}
+    .scroll-indicator{bottom:4.5rem}
+
+    section{padding:3.5rem 1.2rem}
+    .section-heading{font-size:clamp(2.2rem,10vw,3.5rem)}
+
+    .marquee-inner span{font-size:.8rem;padding:0 .9rem}
+
+    .expertise-grid{grid-template-columns:1fr;gap:1rem}
+    .expertise-card{clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))}
+
+    .services-layout{grid-template-columns:1fr;gap:1rem}
+    .service-row{grid-template-columns:1fr;gap:.8rem;clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%)}
+    .service-price{text-align:left}
+    .price-vary{text-align:left}
+    .price-badge{clip-path:polygon(6px 0%,100% 0%,100% 100%,0% 100%,0% 6px)}
+
+    .trust-bar{flex-wrap:wrap;gap:.6rem 1rem;padding:.9rem 1.2rem;justify-content:center}
+    .trust-divider{display:none}
+    .trust-item{font-size:.58rem}
+
+    .manifesto{padding:3rem 1.2rem}
+    .manifesto-text{font-size:clamp(1.8rem,9vw,3rem);letter-spacing:2px}
+
+    .experience-grid{grid-template-columns:repeat(2,1fr);gap:.7rem}
+    .exp-item{padding:1.5rem .6rem}
+    .exp-icon{font-size:1.8rem;margin-bottom:.6rem}
+    .exp-label{font-size:.8rem;letter-spacing:2px}
+
+    .pillars-grid{grid-template-columns:repeat(2,1fr);gap:0}
+    .pillar{padding:1.5rem .5rem;border:1px solid rgba(201,168,76,.08)}
+
+    .contact-section{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1.2rem}
+    .form-row{grid-template-columns:1fr}
+    .contact-form input,.contact-form textarea{font-size:.9rem;padding:1rem}
+
+    footer{flex-direction:column;gap:1.2rem;text-align:center;padding:2rem 1.2rem 5rem}
+    .footer-tagline{text-align:center}
+
+    .sticky-cta{display:flex}
+  }
+
+  @media(max-width:380px){
+    .hero-title{font-size:3.5rem}
+    .hero-eyebrow{display:none}
+    .section-heading{font-size:2rem}
+  }
+
+  /* ══════════════════════════════════════
+     CHAKRA INTRO LOADER
+  ══════════════════════════════════════ */
+  #chakra-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    transition: opacity 0.9s ease, transform 0.9s ease;
+    overflow: hidden;
+  }
+  #chakra-loader.exit {
+    opacity: 0;
+    transform: scale(1.08);
+    pointer-events: none;
+  }
+  #chakra-loader.gone { display: none; }
+
+  /* Ambient pulse glow behind chakras */
+  .chakra-glow-bg {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,50,200,0.18) 0%, transparent 70%);
+    animation: glowPulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes glowPulse {
+    0%,100% { transform: scale(0.8); opacity: 0.4; }
+    50% { transform: scale(1.4); opacity: 1; }
+  }
+
+  /* Logo at top of loader */
+  .loader-brand {
+    position: absolute;
+    top: clamp(1.5rem, 5vw, 3rem);
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.6s 0.3s forwards;
+  }
+  .loader-brand-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    letter-spacing: 8px;
+    color: #C9A84C;
+  }
+  .loader-brand-sub {
+    font-size: 0.55rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-top: 0.3rem;
+  }
+
+  /* Chakra column */
+  .chakra-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.6rem, 2vw, 1.1rem);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Vertical energy line connecting chakras */
+  .chakra-spine {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    top: 0; bottom: 0;
+    background: linear-gradient(to bottom,
+      #4CAF50 0%, #7ED321 14%,
+      #2196F3 28%, #9C27B0 42%,
+      #FF5722 56%, #2196F3 70%,
+      #00BCD4 100%
+    );
+    opacity: 0;
+    animation: spineReveal 1.2s 0.5s forwards;
+    transform-origin: top center;
+  }
+  @keyframes spineReveal {
+    from { clip-path: inset(0 0 100% 0); opacity: 0.6; }
+    to   { clip-path: inset(0 0 0% 0);   opacity: 0.35; }
+  }
+
+  /* Individual chakra symbol */
+  .chakra-sym {
+    width: clamp(44px, 10vw, 72px);
+    height: clamp(44px, 10vw, 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.3) rotate(-90deg);
+    transition: none;
+    position: relative;
+    flex-shrink: 0;
+    cursor: default;
+  }
+  .chakra-sym.lit {
+    animation: chakraReveal 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes chakraReveal {
+    0%   { opacity: 0; transform: scale(0.3) rotate(-90deg); filter: blur(8px); }
+    60%  { opacity: 1; transform: scale(1.15) rotate(5deg);  filter: blur(0); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg);     filter: blur(0); }
+  }
+
+  /* Glow ring per chakra — uses SVG border-image trick via box-shadow */
+  .chakra-sym::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    opacity: 0.3;
+    animation: ringPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes ringPulse {
+    0%,100% { transform: scale(1);    opacity: 0.25; }
+    50%      { transform: scale(1.18); opacity: 0.65; }
+  }
+
+  /* Sanskrit SVG symbols inline */
+  .chakra-sym svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 0 8px currentColor);
+    transition: filter 0.4s;
+  }
+  /* Each chakra spins at its own speed once lit */
+  #ch0.lit svg { animation: spin 18s linear infinite; }
+  #ch1.lit svg { animation: spin 14s linear infinite reverse; }
+  #ch2.lit svg { animation: spin 16s linear infinite; }
+  #ch3.lit svg { animation: spin 20s linear infinite reverse; }
+  #ch4.lit svg { animation: spin 13s linear infinite; }
+  #ch5.lit svg { animation: spin 17s linear infinite reverse; }
+  #ch6.lit svg { animation: spin 15s linear infinite; }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  /* Chakra colors */
+  .ch-1 { color: #4CAF50; }   /* Crown — green/white in image */
+  .ch-2 { color: #8BC34A; }   /* Third Eye — yellow-green */
+  .ch-3 { color: #FF5722; }   /* Throat — orange-red */
+  .ch-4 { color: #9C27B0; }   /* Heart — purple */
+  .ch-5 { color: #3F51B5; }   /* Solar Plexus — deep blue */
+  .ch-6 { color: #2196F3; }   /* Sacral — blue */
+  .ch-7 { color: #00BCD4; }   /* Root — cyan/teal */
+
+  /* Progress bar */
+  .loader-progress {
+    position: absolute;
+    bottom: clamp(2rem, 5vw, 3.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    opacity: 0;
+    animation: fadeIn 0.6s 0.5s forwards;
+  }
+  .loader-progress-track {
+    width: clamp(120px, 30vw, 200px);
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-progress-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(to right, #4CAF50, #9C27B0, #00BCD4);
+    transition: width 0.4s ease;
+  }
+  .loader-progress-text {
+    font-size: 0.55rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Skip button */
+  .loader-skip {
+    position: absolute;
+    top: clamp(1rem, 3vw, 1.8rem);
+    right: clamp(1rem, 4vw, 2rem);
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 0.6s 1s forwards;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .loader-skip:hover { color: rgba(255,255,255,0.5); }
+
+  /* Particle burst on last chakra */
+  .chakra-particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+  }
+  @keyframes particleBurst {
+    0%   { opacity: 1; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(0); }
+  }
+
+  /* Page hidden until loader exits */
+  body.loading .page,
+  body.loading .cosmos,
+  body.loading .stars,
+  body.loading .mobile-menu,
+  body.loading .sticky-cta {
+    visibility: hidden;
+  }
+</style>
+</head>
+<body class="loading">
+
+<!-- ══ CHAKRA INTRO LOADER ══ -->
+<div id="chakra-loader">
+
+  <!-- Brand top -->
+  <div class="loader-brand">
+    <div class="loader-brand-title">The Oracle's Stone</div>
+    <div class="loader-brand-sub">Ancient Wisdom · Divine Guidance · Destiny Unfolded</div>
+  </div>
+
+  <!-- Skip -->
+  <button class="loader-skip" id="loaderSkip">Skip ›</button>
+
+  <!-- Ambient glow -->
+  <div class="chakra-glow-bg"></div>
+
+  <!-- Chakra column -->
+  <div class="chakra-column" id="chakraColumn">
+    <div class="chakra-spine"></div>
+
+    <!-- 1. Crown — Sahasrara — Green OM -->
+    <div class="chakra-sym ch-1" id="ch0">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 3"/>
+        <circle cx="50" cy="50" r="36" stroke="currentColor" stroke-width="1"/>
+        <!-- Lotus petals suggested -->
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".5"/>
+        <path d="M50 70 C46 78,42 82,50 86 C58 82,54 78,50 70Z" fill="currentColor" opacity=".5" transform="rotate(180,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(45,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(90,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(135,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(225,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(270,50,50)"/>
+        <path d="M50 14 C46 22,42 26,50 30 C58 26,54 22,50 14Z" fill="currentColor" opacity=".4" transform="rotate(315,50,50)"/>
+        <!-- OM -->
+        <text x="50" y="57" text-anchor="middle" font-size="28" fill="currentColor" font-family="serif">ॐ</text>
+      </svg>
+    </div>
+
+    <!-- 2. Third Eye — Ajna — Yellow-green -->
+    <div class="chakra-sym ch-2" id="ch1">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Eye shape -->
+        <path d="M10 50 Q50 15 90 50 Q50 85 10 50Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <!-- Triangle -->
+        <polygon points="50,28 72,62 28,62" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <circle cx="50" cy="50" r="6" fill="currentColor" opacity=".7"/>
+        <!-- Dots -->
+        <circle cx="15" cy="50" r="2" fill="currentColor" opacity=".5"/>
+        <circle cx="85" cy="50" r="2" fill="currentColor" opacity=".5"/>
+        <text x="50" y="57" text-anchor="middle" font-size="16" fill="currentColor" font-family="serif" opacity=".8">ॐ</text>
+      </svg>
+    </div>
+
+    <!-- 3. Vishuddha — Throat — Orange-red -->
+    <div class="chakra-sym ch-3" id="ch2">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="1.2"/>
+        <!-- 16 lotus petals -->
+        <g opacity=".45">
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(22.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(45,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(67.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(90,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(112.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(135,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(157.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(180,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(202.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(225,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(247.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(270,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(292.5,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(315,50,50)"/>
+          <path d="M50 10 C47 18,47 24,50 28 C53 24,53 18,50 10Z" fill="currentColor" transform="rotate(337.5,50,50)"/>
+        </g>
+        <circle cx="50" cy="50" r="20" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        <!-- downward triangle -->
+        <polygon points="50,35 65,60 35,60" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <text x="50" y="57" text-anchor="middle" font-size="18" fill="currentColor" font-family="serif">&#2361;</text>
+      </svg>
+    </div>
+
+    <!-- 4. Anahata — Heart — Purple -->
+    <div class="chakra-sym ch-4" id="ch3">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="1.2"/>
+        <!-- 12 petals -->
+        <g opacity=".4">
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(30,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(60,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(90,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(120,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(150,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(180,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(210,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(240,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(270,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(300,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(330,50,50)"/>
+        </g>
+        <!-- Star of David (two triangles) -->
+        <polygon points="50,28 67,58 33,58" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <polygon points="50,72 67,42 33,42" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <circle cx="50" cy="50" r="6" fill="currentColor" opacity=".5"/>
+      </svg>
+    </div>
+
+    <!-- 5. Manipura — Solar Plexus — Deep Blue -->
+    <div class="chakra-sym ch-5" id="ch4">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="1.2"/>
+        <!-- 10 petals -->
+        <g opacity=".4">
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(36,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(72,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(108,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(144,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(180,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(216,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(252,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(288,50,50)"/>
+          <path d="M50 8 C47 16,47 22,50 26 C53 22,53 16,50 8Z" fill="currentColor" transform="rotate(324,50,50)"/>
+        </g>
+        <!-- downward triangle -->
+        <polygon points="50,32 68,63 32,63" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <circle cx="50" cy="50" r="18" stroke="currentColor" stroke-width="1" fill="none"/>
+        <text x="50" y="57" text-anchor="middle" font-size="16" fill="currentColor" font-family="serif">&#2352;</text>
+      </svg>
+    </div>
+
+    <!-- 6. Svadhishthana — Sacral — Blue -->
+    <div class="chakra-sym ch-6" id="ch5">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="1.5"/>
+        <!-- 6 petals -->
+        <g opacity=".45">
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor"/>
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor" transform="rotate(60,50,50)"/>
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor" transform="rotate(120,50,50)"/>
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor" transform="rotate(180,50,50)"/>
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor" transform="rotate(240,50,50)"/>
+          <path d="M50 8 C46 18,46 24,50 28 C54 24,54 18,50 8Z" fill="currentColor" transform="rotate(300,50,50)"/>
+        </g>
+        <circle cx="50" cy="50" r="24" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="1" fill="none"/>
+        <text x="50" y="57" text-anchor="middle" font-size="18" fill="currentColor" font-family="serif">&#2357;</text>
+      </svg>
+    </div>
+
+    <!-- 7. Muladhara — Root — Teal/Cyan -->
+    <div class="chakra-sym ch-7" id="ch6">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="1.5"/>
+        <!-- 4 petals -->
+        <g opacity=".5">
+          <path d="M50 8 C45 20,45 26,50 30 C55 26,55 20,50 8Z" fill="currentColor"/>
+          <path d="M50 8 C45 20,45 26,50 30 C55 26,55 20,50 8Z" fill="currentColor" transform="rotate(90,50,50)"/>
+          <path d="M50 8 C45 20,45 26,50 30 C55 26,55 20,50 8Z" fill="currentColor" transform="rotate(180,50,50)"/>
+          <path d="M50 8 C45 20,45 26,50 30 C55 26,55 20,50 8Z" fill="currentColor" transform="rotate(270,50,50)"/>
+        </g>
+        <!-- Square -->
+        <rect x="32" y="32" width="36" height="36" stroke="currentColor" stroke-width="1.5" fill="none" transform="rotate(45,50,50)"/>
+        <circle cx="50" cy="50" r="12" stroke="currentColor" stroke-width="1" fill="none"/>
+        <text x="50" y="57" text-anchor="middle" font-size="16" fill="currentColor" font-family="serif">&#2354;</text>
+      </svg>
+    </div>
+
+  </div><!-- /chakra-column -->
+
+  <!-- Progress -->
+  <div class="loader-progress">
+    <div class="loader-progress-track"><div class="loader-progress-fill" id="loaderFill"></div></div>
+    <div class="loader-progress-text" id="loaderText">Awakening your energy...</div>
+  </div>
+
+</div><!-- /chakra-loader -->
+
+<div class="cosmos">
+  <img class="cosmos-img" src="/mnt/user-data/uploads/ddfed4156fcaaf06ceead59c97bcf4ad.jpg" alt="" />
+</div>
+<div class="stars" id="stars"></div>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#expertise" onclick="closeMenu()">Expertise</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#about" onclick="closeMenu()">Philosophy</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="https://wa.me/919104584145" target="_blank" class="menu-cta">WhatsApp Now</a>
+</div>
+
+<div class="page">
+
+  <nav>
+    <a href="#" class="nav-logo">The Oracle's Stone</a>
+    <ul class="nav-links">
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#about">Philosophy</a></li>
+      <li><a href="#contact">Consult</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Book Session</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-eyebrow">&#2384; &middot; Ancient Wisdom &middot; Divine Guidance &middot; Destiny Unfolded</p>
+    <h1 class="hero-title">The<br/><span>Oracle's</span>Stone</h1>
+    <p class="hero-sub">Align your energy &middot; Balance your life &middot; Manifest your destiny</p>
+    <div class="hero-divider"><div class="hero-divider-dot"></div></div>
+    <p class="hero-name">Mayur Brahmbhatt</p>
+    <p class="hero-tagline">Guiding you towards a balanced, prosperous &amp; harmonious life</p>
+    <div class="hero-cta-group">
+      <a href="#contact" class="btn-primary">Begin Your Journey</a>
+      <a href="#services" class="btn-outline">View Services &amp; Prices</a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="marquee-strip">
+    <div class="marquee-inner">
+      <span>Ancient Wisdom</span><span class="dot">&#9679;</span>
+      <span>Crystal Theory</span><span class="dot">&#9679;</span>
+      <span>Vastu Consultancy</span><span class="dot">&#9679;</span>
+      <span>Energy Healing</span><span class="dot">&#9679;</span>
+      <span>Astrology</span><span class="dot">&#9679;</span>
+      <span>Manifestation</span><span class="dot">&#9679;</span>
+      <span>Divine Guidance</span><span class="dot">&#9679;</span>
+      <span>Holistic Solutions</span><span class="dot">&#9679;</span>
+      <span>Ancient Wisdom</span><span class="dot">&#9679;</span>
+      <span>Crystal Theory</span><span class="dot">&#9679;</span>
+      <span>Vastu Consultancy</span><span class="dot">&#9679;</span>
+      <span>Energy Healing</span><span class="dot">&#9679;</span>
+      <span>Astrology</span><span class="dot">&#9679;</span>
+      <span>Manifestation</span><span class="dot">&#9679;</span>
+      <span>Divine Guidance</span><span class="dot">&#9679;</span>
+      <span>Holistic Solutions</span><span class="dot">&#9679;</span>
+    </div>
+  </div>
+
+  <section id="expertise" class="section-bg">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-heading reveal">Our<br/>Expertise<span style="color:var(--red)">.</span></h2>
+    <div class="gold-line reveal"></div>
+    <div class="expertise-grid reveal">
+
+      <div class="expertise-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-number">01</div>
+        <div class="card-icon-wrap"><span class="card-icon">&#9791;</span></div>
+        <div class="card-title">Astrology</div>
+        <p class="card-desc">In-depth horoscope analysis for clarity, guidance and accurate predictions about your life path.</p>
+        <div class="card-bottom-line"></div>
+      </div>
+
+      <div class="expertise-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-number">02</div>
+        <div class="card-icon-wrap"><span class="card-icon">&#127968;</span></div>
+        <div class="card-title">Vastu Consultancy</div>
+        <p class="card-desc">Harmonize your space with Vastu principles and Crystal Pyramids Theory for health, wealth &amp; happiness.</p>
+        <div class="card-bottom-line"></div>
+      </div>
+
+      <div class="expertise-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-number">03</div>
+        <div class="card-icon-wrap"><span class="card-icon">&#128302;</span></div>
+        <div class="card-title">Crystal Theory Solutions</div>
+        <p class="card-desc">Scientific use of crystals and pyramids to balance energies and remove obstacles from your life.</p>
+        <div class="card-bottom-line"></div>
+      </div>
+
+      <div class="expertise-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-number">04</div>
+        <div class="card-icon-wrap"><span class="card-icon">&#10022;</span></div>
+        <div class="card-title">Energy Reading &amp; Healing</div>
+        <p class="card-desc">Aura &amp; energy reading to identify blockages and restore positivity, peace and well-being.</p>
+        <div class="card-bottom-line"></div>
+      </div>
+
+      <div class="expertise-card">
+        <div class="card-bg-glow"></div>
+        <div class="card-number">05</div>
+        <div class="card-icon-wrap"><span class="card-icon">&#127800;</span></div>
+        <div class="card-title">Manifestation &amp; Affirmations</div>
+        <p class="card-desc">Powerful techniques to help you attract abundance and achieve your deepest dreams.</p>
+        <div class="card-bottom-line"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="services" class="services-section">
+    <div class="section-label">Transparent Pricing</div>
+    <h2 class="section-heading reveal">Services &amp;<br/>Charges<span style="color:var(--red)">.</span></h2>
+    <div class="gold-line reveal"></div>
+    <div class="services-layout reveal">
+
+      <!-- LEFT: WHAT YOU RECEIVE -->
+      <div class="receive-panel">
+        <div class="receive-panel-glow"></div>
+        <div class="receive-title">&#10022; What You Receive</div>
+        <div class="receive-item"><span class="receive-item-icon">&#127919;</span><span>Accurate Predictions</span></div>
+        <div class="receive-item"><span class="receive-item-icon">&#127807;</span><span>Personalized Remedies</span></div>
+        <div class="receive-item"><span class="receive-item-icon">&#2384;</span><span>Vedic Chanting &amp; Healing</span></div>
+        <div class="receive-item"><span class="receive-item-icon">&#128142;</span><span>Crystal Energy Solutions</span></div>
+        <div class="receive-item"><span class="receive-item-icon">&#127800;</span><span>Positive Transformation</span></div>
+        <div class="receive-item"><span class="receive-item-icon">&#129309;</span><span>Lifelong Guidance &amp; Support</span></div>
+      </div>
+
+      <!-- RIGHT: SERVICE CARDS -->
+      <div class="service-rows">
+
+        <div class="service-row">
+          <div class="service-row-left">
+            <div class="service-icon-wrap"><span class="service-icon">&#9791;</span></div>
+            <div>
+              <div class="service-name">Horoscope Analysis</div>
+              <div class="service-desc">In-depth Vedic Horoscope Analysis with accurate predictions and remedies.</div>
+              <div class="service-note">&#9733; Vadodara &amp; Telephonic Consultation only</div>
+            </div>
+          </div>
+          <div class="service-price">
+            <div class="price-badge">
+              <span class="price-value">&#8377;3500<span>to &#8377;4100</span></span>
+              <span class="price-sub">per horoscope</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-row-left">
+            <div class="service-icon-wrap"><span class="service-icon">&#128222;</span></div>
+            <div>
+              <div class="service-name">Out of Station Consultation</div>
+              <div class="service-desc">Remote consultation via call or video for clients outside Vadodara.</div>
+            </div>
+          </div>
+          <div class="service-price">
+            <div class="price-badge">
+              <span class="price-value">&#8377;3599</span>
+              <span class="price-sub">per horoscope</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-row-left">
+            <div class="service-icon-wrap"><span class="service-icon">&#127968;</span></div>
+            <div>
+              <div class="service-name">Vastu Consultation</div>
+              <div class="service-desc">Charges depend on BHK module and guidance with Crystal Pyramids Theory Solution.</div>
+              <div class="service-note">Per pyramid — different charges for Vedic Chanting &amp; Healing.</div>
+            </div>
+          </div>
+          <div class="service-price">
+            <div class="price-vary">Varies per<br/>BHK &amp; requirement</div>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-row-left">
+            <div class="service-icon-wrap"><span class="service-icon">&#129392;</span></div>
+            <div>
+              <div class="service-name">Healthy Lifestyle Affirmation Notes</div>
+              <div class="service-desc">Personalised affirmation and manifestation guidance notes for a balanced, joyful life.</div>
+            </div>
+          </div>
+          <div class="service-price">
+            <div class="price-badge">
+              <span class="price-value">&#8377;4100</span>
+              <span class="price-sub">per session</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-row-left">
+            <div class="service-icon-wrap"><span class="service-icon">&#128319;</span></div>
+            <div>
+              <div class="service-name">Wearing Bracelet</div>
+              <div class="service-desc">Real combination bracelet aligned with your birth chart &amp; destiny numbers to support energy.</div>
+              <div class="service-note">Per bracelet — includes Vedic chanting healing.</div>
+            </div>
+          </div>
+          <div class="service-price">
+            <div class="price-badge">
+              <span class="price-value">&#8377;2700</span>
+              <span class="price-sub">per bracelet</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="trust-bar">
+    <span class="trust-item">Trusted Guidance</span><div class="trust-divider"></div>
+    <span class="trust-item">Confidential Consultation</span><div class="trust-divider"></div>
+    <span class="trust-item">Positive Results</span><div class="trust-divider"></div>
+    <span class="trust-item">Divine Guidance</span><div class="trust-divider"></div>
+    <span class="trust-item">Scientific Approach</span><div class="trust-divider"></div>
+    <span class="trust-item">Spiritual Healing</span>
+  </div>
+
+  <div class="manifesto reveal">
+    <p class="manifesto-text">
+      Empowering you to create a life<br/>
+      filled with <em>Positivity</em>, <em>Prosperity</em><br/>
+      and <em>Purpose</em><span class="manifesto-red"></span>
+    </p>
+  </div>
+
+  <section id="experience" style="padding:4rem 1.5rem">
+    <div class="section-label">Transformation Awaits</div>
+    <h2 class="section-heading reveal">What You<br/>Can Experience<span style="color:var(--red)">.</span></h2>
+    <div class="gold-line reveal"></div>
+    <div class="experience-grid reveal">
+      <div class="exp-item"><span class="exp-icon">&#127919;</span><div class="exp-label">Clarity in Life<br/>Decisions</div></div>
+      <div class="exp-item"><span class="exp-icon">&#128200;</span><div class="exp-label">Growth in Career<br/>&amp; Finances</div></div>
+      <div class="exp-item"><span class="exp-icon">&#128158;</span><div class="exp-label">Better Relationships<br/>&amp; Harmony</div></div>
+      <div class="exp-item"><span class="exp-icon">&#128123;</span><div class="exp-label">Protection from<br/>Negativity</div></div>
+      <div class="exp-item"><span class="exp-icon">&#129392;</span><div class="exp-label">Inner Peace<br/>&amp; Well-being</div></div>
+    </div>
+  </section>
+
+  <section id="about" class="section-bg">
+    <div class="section-label">Our Foundation</div>
+    <h2 class="section-heading reveal">Six Pillars of<br/>Guidance<span style="color:var(--red)">.</span></h2>
+    <div class="gold-line reveal"></div>
+    <div class="pillars-grid reveal">
+      <div class="pillar"><div class="pillar-number">01</div><span class="pillar-icon">&#9728;&#65039;</span><div class="pillar-name">Ancient Wisdom</div></div>
+      <div class="pillar"><div class="pillar-number">02</div><span class="pillar-icon">&#128300;</span><div class="pillar-name">Scientific Approach</div></div>
+      <div class="pillar"><div class="pillar-number">03</div><span class="pillar-icon">&#129392;</span><div class="pillar-name">Spiritual Healing</div></div>
+      <div class="pillar"><div class="pillar-number">04</div><span class="pillar-icon">&#127758;</span><div class="pillar-name">Holistic Solutions</div></div>
+      <div class="pillar"><div class="pillar-number">05</div><span class="pillar-icon">&#128142;</span><div class="pillar-name">Crystal Energy</div></div>
+      <div class="pillar"><div class="pillar-number">06</div><span class="pillar-icon">&#10024;</span><div class="pillar-name">Divine Guidance</div></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <div class="contact-left">
+      <div class="section-label">Reach Out</div>
+      <h2 class="section-heading reveal">Begin Your<br/>Consultation<span style="color:var(--red)">.</span></h2>
+      <p>Take the first step towards a balanced, prosperous and harmonious life. Connect with Mayur Brahmbhatt for a personal consultation.</p>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Mobile</span>
+        <span class="contact-detail-val"><a href="tel:+919104584145" style="color:inherit;text-decoration:none">+91 9104584145</a></span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">WhatsApp</span>
+        <span class="contact-detail-val"><a href="https://wa.me/919104584145" target="_blank" style="color:inherit;text-decoration:none">+91 9104584145</a></span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Services</span>
+        <span class="contact-detail-val">Astrology &middot; Vastu &middot; Crystal &middot; Energy &middot; Manifestation</span>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-label">Location</span>
+        <span class="contact-detail-val">India &amp; Worldwide &mdash; Online Sessions Available</span>
+      </div>
+      <div style="margin-top:1.8rem;display:flex;gap:.8rem;flex-wrap:wrap">
+        <a href="https://wa.me/919104584145" target="_blank" class="btn-primary">WhatsApp</a>
+        <a href="tel:+919104584145" class="btn-outline">Call Now</a>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <input type="text" placeholder="Your Name" autocomplete="name" />
+        <input type="tel" placeholder="Phone Number" autocomplete="tel" />
+      </div>
+      <input type="email" placeholder="Email Address" autocomplete="email" />
+      <input type="text" placeholder="Interest — Astrology / Vastu / Crystal..." />
+      <textarea placeholder="Describe what you seek guidance on..."></textarea>
+      <button class="btn-primary" style="align-self:flex-start;cursor:pointer;border:none">Send Message</button>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="footer-logo">The Oracle's Stone</div>
+      <div class="footer-copy">&copy; 2026 Mayur Brahmbhatt. All rights reserved.</div>
+    </div>
+    <div class="footer-tagline">
+      Jai Shri Ram &middot; Jai Shri Krishna<br/>
+      Your Destiny is Written&hellip;<br/>
+      <span style="color:var(--gold)">Let us help you read it right.</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- STICKY BOTTOM CTA — mobile -->
+<div class="sticky-cta">
+  <a href="tel:+919104584145" class="cta-call">&#128222; Call</a>
+  <a href="https://wa.me/919104584145" target="_blank" class="cta-wa">WhatsApp</a>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   CHAKRA INTRO CONTROLLER
+══════════════════════════════════════ */
+(function(){
+  var loader = document.getElementById('chakra-loader');
+  var skip   = document.getElementById('loaderSkip');
+  var fill   = document.getElementById('loaderFill');
+  var txt    = document.getElementById('loaderText');
+
+  // Exact colors from the uploaded chakra image (top to bottom)
+  var chakras = [
+    { id:'ch0', color:'#00e676', name:'Sahasrara',   label:'Crown'       },
+    { id:'ch1', color:'#76ff03', name:'Ajna',        label:'Third Eye'   },
+    { id:'ch2', color:'#ff6d00', name:'Vishuddha',   label:'Throat'      },
+    { id:'ch3', color:'#aa00ff', name:'Anahata',     label:'Heart'       },
+    { id:'ch4', color:'#2962ff', name:'Manipura',    label:'Solar Plexus'},
+    { id:'ch5', color:'#0d47a1', name:'Svadhishthana',label:'Sacral'     },
+    { id:'ch6', color:'#00e5ff', name:'Muladhara',   label:'Root'        }
+  ];
+
+  var messages = [
+    'Awakening Crown Chakra...',
+    'Opening Third Eye...',
+    'Clearing the Throat...',
+    'Opening the Heart...',
+    'Igniting Solar Energy...',
+    'Flowing Sacral Waters...',
+    'Grounding Root Energy...',
+    'All chakras aligned.'
+  ];
+
+  // Apply correct neon colors to each chakra symbol via CSS custom property
+  chakras.forEach(function(c){
+    var el = document.getElementById(c.id);
+    if(el){ el.style.setProperty('color', c.color); el.style.setProperty('--c', c.color); }
+  });
+
+  // Also patch the color classes to use the right colors
+  var styleEl = document.createElement('style');
+  styleEl.textContent =
+    '.ch-1{color:#00e676!important} .ch-2{color:#76ff03!important} .ch-3{color:#ff6d00!important} .ch-4{color:#aa00ff!important} .ch-5{color:#2962ff!important} .ch-6{color:#0d47a1!important} .ch-7{color:#00e5ff!important}';
+  document.head.appendChild(styleEl);
+
+  // Sequential chakra lighting
+  var current = 0;
+  var interval = 380; // ms between each chakra lighting up
+  var totalDuration = chakras.length * interval + 1400;
+
+  function lightNext(){
+    if(current >= chakras.length){
+      // All lit — fire particle burst, then wait and exit
+      if(fill) fill.style.width = '100%';
+      if(txt)  txt.textContent  = messages[messages.length - 1];
+      setTimeout(exitLoader, 1400);
+      return;
+    }
+    var c  = chakras[current];
+    var el = document.getElementById(c.id);
+    if(el){
+      el.classList.add('lit');
+      // Ripple glow burst
+      spawnParticles(el, c.color);
+    }
+    if(fill) fill.style.width = ((current+1)/chakras.length * 100) + '%';
+    if(txt)  txt.textContent  = messages[current] || '';
+    current++;
+    setTimeout(lightNext, interval);
+  }
+
+  function spawnParticles(el, color){
+    var rect = el.getBoundingClientRect();
+    var cx = rect.left + rect.width/2;
+    var cy = rect.top  + rect.height/2;
+    for(var i=0;i<10;i++){
+      var p = document.createElement('div');
+      p.className = 'chakra-particle';
+      var angle = (i/10)*Math.PI*2;
+      var dist  = 30 + Math.random()*40;
+      p.style.cssText =
+        'position:fixed;width:3px;height:3px;border-radius:50%;background:'+color+
+        ';left:'+cx+'px;top:'+cy+'px;pointer-events:none;z-index:10000;'+
+        '--tx:'+(Math.cos(angle)*dist).toFixed(1)+'px;'+
+        '--ty:'+(Math.sin(angle)*dist).toFixed(1)+'px;'+
+        'animation:particleBurst 0.8s ease-out forwards;'+
+        'animation-delay:'+(Math.random()*0.2).toFixed(2)+'s';
+      document.body.appendChild(p);
+      setTimeout(function(pp){ pp.parentNode && pp.parentNode.removeChild(pp); }, 1200, p);
+    }
+  }
+
+  function exitLoader(){
+    loader.classList.add('exit');
+    document.body.classList.remove('loading');
+    setTimeout(function(){
+      loader.style.display = 'none';
+    }, 1300);
+  }
+
+  // Start sequence after a brief pause
+  setTimeout(lightNext, 600);
+
+  // Skip button
+  if(skip){
+    skip.addEventListener('click', function(){
+      // Light all immediately
+      chakras.forEach(function(c){
+        var el = document.getElementById(c.id);
+        if(el) el.classList.add('lit');
+      });
+      if(fill) fill.style.width = '100%';
+      exitLoader();
+    });
+  }
+
+  // Auto-exit safety net
+  setTimeout(exitLoader, totalDuration + 2000);
+
+})();
+
+/* ══════════════════════════════════════
+   STAR PARTICLES
+══════════════════════════════════════ */
+(function(){
+  var c=document.getElementById('stars');
+  for(var i=0;i<60;i++){
+    var s=document.createElement('div');
+    s.className='star';
+    var sz=(Math.random()*2.5+0.5).toFixed(1);
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;--d:'+(Math.random()*4+2).toFixed(1)+'s;--op:'+(Math.random()*.6+.2).toFixed(2)+';animation-delay:'+(Math.random()*5).toFixed(1)+'s';
+    c.appendChild(s);
+  }
+})();
+
+/* ══════════════════════════════════════
+   HAMBURGER MENU
+══════════════════════════════════════ */
+var hamburger=document.getElementById('hamburger');
+var mobileMenu=document.getElementById('mobileMenu');
+function closeMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow='';}
+hamburger.addEventListener('click',function(){
+  var open=hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+(function(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+})();
+
+document.querySelectorAll('.expertise-card').forEach(function(c,i){c.style.transitionDelay=(i*.07)+'s';});
+</script>
+</body>
+</html>
